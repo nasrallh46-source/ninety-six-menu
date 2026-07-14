@@ -1,0 +1,794 @@
+
+.adminLoading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  font-family: 'Cairo', sans-serif;
+  background: #1d0c23;
+  color: #fff;
+}
+
+.adminLoginPage {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  font-family: 'Cairo', sans-serif;
+  background:
+    linear-gradient(rgba(25, 8, 33, 0.82), rgba(25, 8, 33, 0.9)),
+    url('./assets/background.jpeg') center/cover no-repeat;
+}
+
+.adminLoginCard {
+  width: min(430px, 100%);
+  padding: 36px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
+}
+
+.adminBrand {
+  margin-bottom: 25px;
+  text-align: center;
+  color: #4b1c59;
+}
+
+.adminBrand span {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.adminBrand small {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+}
+
+.adminLoginCard h1 {
+  margin: 0;
+  color: #2d1035;
+  font-size: 27px;
+}
+
+.adminLoginCard > p {
+  margin: 8px 0 25px;
+  color: #74647a;
+}
+
+.adminLoginCard label {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 18px;
+  color: #43204d;
+  font-weight: 600;
+}
+
+.adminLoginCard input {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid #d9cfe0;
+  border-radius: 12px;
+  background: #fff;
+  font: inherit;
+  outline: none;
+}
+
+.adminLoginCard input:focus {
+  border-color: #6b317d;
+  box-shadow: 0 0 0 3px rgba(107, 49, 125, 0.12);
+}
+
+.adminLoginCard button,
+.adminTopBar button {
+  border: 0;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+}
+
+.adminLoginCard button {
+  width: 100%;
+  padding: 13px;
+  border-radius: 12px;
+  color: #fff;
+  background: #542065;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.adminLoginCard button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.adminError {
+  margin-bottom: 15px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: #a01616;
+  background: #ffeaea;
+}
+
+.backToMenu {
+  display: block;
+  margin-top: 18px;
+  text-align: center;
+  color: #6c5873;
+  text-decoration: none;
+}
+
+.backToMenu:hover {
+  color: #4b1c59;
+  text-decoration: underline;
+}
+
+.adminDashboard {
+  min-height: 100vh;
+  padding-bottom: 50px;
+  font-family: 'Cairo', sans-serif;
+  background: #f5f1f6;
+  color: #291132;
+}
+
+.adminTopBar {
+  min-height: 76px;
+  padding: 14px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  background: #2c1035;
+}
+
+.adminTopBar div {
+  display: flex;
+  flex-direction: column;
+}
+
+.adminTopBar strong {
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 2px;
+}
+
+.adminTopBar span {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.adminTopBar button {
+  padding: 9px 16px;
+  border-radius: 10px;
+  color: #2c1035;
+  background: #fff;
+  font-weight: 700;
+}
+
+.adminWelcome {
+  width: min(1100px, calc(100% - 34px));
+  margin: 45px auto 25px;
+}
+
+.adminWelcome h1 {
+  margin: 0;
+  font-size: 34px;
+}
+
+.adminWelcome p {
+  margin: 5px 0 0;
+  color: #7a687f;
+}
+
+.adminDashboardError {
+  width: min(1100px, calc(100% - 34px));
+  margin: 0 auto 20px;
+  padding: 12px 15px;
+  border-radius: 10px;
+  color: #a01616;
+  background: #ffeaea;
+}
+
+.adminCards {
+  width: min(1100px, calc(100% - 34px));
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.adminCards article {
+  padding: 25px;
+  border: 1px solid rgba(74, 30, 86, 0.08);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 12px 35px rgba(58, 18, 70, 0.07);
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.adminCards article:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 45px rgba(58, 18, 70, 0.14);
+}
+
+.adminCards h2 {
+  margin: 0 0 8px;
+}
+
+.adminCards p {
+  margin: 0;
+  color: #78667d;
+}
+
+.adminCardDisabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  filter: grayscale(0.2);
+}
+
+.adminCardDisabled:hover {
+  transform: none;
+  box-shadow: 0 12px 35px rgba(58, 18, 70, 0.07);
+}
+
+.menuUploadSection {
+  width: min(1100px, calc(100% - 34px));
+  margin: 0 auto 25px;
+  padding: 20px;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 12px 35px rgba(58, 18, 70, 0.07);
+}
+
+.menuUploadSection button {
+  width: 100%;
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 12px;
+  color: #ffffff;
+  background: #542065;
+  font-family: 'Cairo', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.menuUploadSection button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.uploadSuccess {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #e8f8ee;
+  color: #176b39;
+  text-align: center;
+}
+
+/* ---------- Products ---------- */
+
+.adminProductsSection {
+  width: min(1100px, calc(100% - 34px));
+  margin: 30px auto 0;
+}
+
+.adminProductsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.adminProductsHeader h2 {
+  margin: 0;
+}
+
+.adminProductsHeader p {
+  margin: 5px 0 0;
+  color: #78667d;
+}
+
+.adminProductsHeaderButtons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.adminProductsHeaderButtons button,
+.adminProductFormButtons button,
+.adminProductActions button {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 15px;
+  font-family: 'Cairo', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  background: #542065;
+}
+
+.adminProductsHeaderButtons button:disabled,
+.adminProductFormButtons button:disabled,
+.adminProductActions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.adminProductSearch {
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border: 1px solid #d9cfe0;
+  border-radius: 11px;
+  font-family: 'Cairo', sans-serif;
+}
+
+.adminProductForm {
+  margin-bottom: 22px;
+  padding: 22px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 35px rgba(58, 18, 70, 0.07);
+}
+
+.adminProductForm h3 {
+  margin: 0 0 18px;
+}
+
+.adminProductFormGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.adminProductFormGrid label {
+  display: grid;
+  gap: 7px;
+  font-weight: 600;
+  color: #43204d;
+}
+
+.adminProductFormGrid input,
+.adminProductFormGrid select,
+.adminProductFormGrid textarea {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid #d9cfe0;
+  border-radius: 10px;
+  font-family: 'Cairo', sans-serif;
+  outline: none;
+}
+
+.adminProductFormGrid input:focus,
+.adminProductFormGrid select:focus,
+.adminProductFormGrid textarea:focus {
+  border-color: #6b317d;
+  box-shadow: 0 0 0 3px rgba(107, 49, 125, 0.12);
+}
+
+.productVisibleLabel {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 8px !important;
+}
+
+.productVisibleLabel input {
+  width: auto;
+}
+
+.adminImageUrlLabel {
+  grid-column: 1 / -1;
+}
+
+.adminImagePreview {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.adminCurrentProductImage {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid #e4dbe9;
+  background: #f7f3f9;
+}
+
+.adminImagePlaceholder {
+  width: 120px;
+  height: 120px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  border: 1px dashed #cdbdd6;
+  background: #f7f3f9;
+  color: #9a86a3;
+  font-size: 12px;
+  text-align: center;
+  padding: 8px;
+}
+
+.adminImageUnavailable {
+  width: 120px;
+  height: 120px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  border: 1px dashed #e0a5a5;
+  background: #fdf1f1;
+  color: #a01616;
+  font-size: 11px;
+  text-align: center;
+  padding: 8px;
+}
+
+.clearImageButton {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-family: 'Cairo', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  color: #9c2828;
+  background: #ffeaea;
+}
+
+.clearImageButton:hover {
+  background: #ffdcdc;
+}
+
+.adminProductFormButtons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cancelProductButton {
+  color: #542065 !important;
+  background: #eee6f1 !important;
+}
+
+.adminProductsTableWrapper {
+  overflow-x: auto;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 35px rgba(58, 18, 70, 0.07);
+}
+
+.adminProductsTable {
+  width: 100%;
+  min-width: 820px;
+  border-collapse: collapse;
+}
+
+.adminProductsTable th,
+.adminProductsTable td {
+  padding: 14px;
+  border-bottom: 1px solid #eee7f1;
+  text-align: right;
+  vertical-align: middle;
+}
+
+.adminProductsTable th {
+  background: #f0e9f2;
+  color: #4b1c59;
+}
+
+.adminProductsTable td strong,
+.adminProductsTable td small {
+  display: block;
+}
+
+.adminProductsTable td small {
+  margin-top: 3px;
+  color: #7a687f;
+}
+
+.adminProductImage {
+  width: 58px;
+  height: 58px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+
+.productVisibleButton,
+.productHiddenButton {
+  border: 0;
+  border-radius: 9px;
+  padding: 7px 10px;
+  font-family: 'Cairo', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.productVisibleButton {
+  color: #176b39;
+  background: #e8f8ee;
+}
+
+.productHiddenButton {
+  color: #9c2828;
+  background: #ffeaea;
+}
+
+.adminProductActions {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.deleteProductButton {
+  background: #a52b2b !important;
+}
+
+.deleteProductButton:hover {
+  background: #8a2323 !important;
+}
+
+/* ---------- Categories ---------- */
+
+.adminCategoriesSection {
+  width: min(1100px, calc(100% - 34px));
+  margin: 30px auto 0;
+}
+
+.adminCategoriesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.adminCategoriesHeader h2 {
+  margin: 0;
+}
+
+.adminCategoriesHeader p {
+  margin: 5px 0 0;
+  color: #78667d;
+}
+
+.adminCategoriesHeader button {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 15px;
+  font-family: 'Cairo', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  background: #542065;
+}
+
+.adminCategoriesList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.adminCategoryCard {
+  padding: 18px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 12px 35px rgba(58, 18, 70, 0.07);
+}
+
+.adminCategoryCard h3 {
+  margin: 0 0 4px;
+}
+
+.adminCategoryCard p {
+  margin: 0 0 12px;
+  color: #78667d;
+}
+
+.adminCategoryActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.adminCategoryActions button {
+  border: 0;
+  border-radius: 9px;
+  padding: 8px 12px;
+  font-family: 'Cairo', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  background: #542065;
+}
+
+.deleteCategoryButton {
+  background: #a52b2b !important;
+}
+
+.deleteCategoryButton:hover {
+  background: #8a2323 !important;
+}
+
+.adminCategoryForm {
+  margin-bottom: 22px;
+  padding: 22px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 35px rgba(58, 18, 70, 0.07);
+}
+
+.adminCategoryForm h3 {
+  margin: 0 0 18px;
+}
+
+.adminCategoryFormGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.adminCategoryFormGrid label {
+  display: grid;
+  gap: 7px;
+  font-weight: 600;
+  color: #43204d;
+}
+
+.adminCategoryFormGrid input {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid #d9cfe0;
+  border-radius: 10px;
+  font-family: 'Cairo', sans-serif;
+  outline: none;
+}
+
+.adminCategoryFormGrid input:focus {
+  border-color: #6b317d;
+  box-shadow: 0 0 0 3px rgba(107, 49, 125, 0.12);
+}
+
+.adminCategoryFormButtons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cancelCategoryButton {
+  color: #542065 !important;
+  background: #eee6f1 !important;
+}
+
+/* ---------- Site settings ---------- */
+
+.adminSiteSettingsSection {
+  width: min(1100px, calc(100% - 34px));
+  margin: 30px auto 0;
+}
+
+.adminSiteSettingsSection h2 {
+  margin: 0 0 5px;
+}
+
+.adminSiteSettingsSection > p {
+  margin: 0 0 18px;
+  color: #78667d;
+}
+
+.adminSiteSettingsForm {
+  padding: 22px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 35px rgba(58, 18, 70, 0.07);
+}
+
+.adminSiteSettingsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.adminSiteSettingsGrid label {
+  display: grid;
+  gap: 7px;
+  font-weight: 600;
+  color: #43204d;
+}
+
+.adminSiteSettingsGrid input,
+.adminSiteSettingsGrid textarea {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid #d9cfe0;
+  border-radius: 10px;
+  font-family: 'Cairo', sans-serif;
+  outline: none;
+}
+
+.adminSiteSettingsGrid textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.adminSiteSettingsGrid input:focus,
+.adminSiteSettingsGrid textarea:focus {
+  border-color: #6b317d;
+  box-shadow: 0 0 0 3px rgba(107, 49, 125, 0.12);
+}
+
+.adminSiteSettingsForm button {
+  margin-top: 20px;
+  border: 0;
+  border-radius: 12px;
+  padding: 13px 20px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  background: #542065;
+}
+
+.adminSiteSettingsForm button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 700px) {
+  .adminProductsHeader,
+  .adminCategoriesHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .adminProductsHeaderButtons {
+    flex-direction: column;
+  }
+
+  .adminProductsHeaderButtons button,
+  .adminCategoriesHeader button {
+    width: 100%;
+  }
+
+  .adminProductFormGrid,
+  .adminCategoryFormGrid,
+  .adminSiteSettingsGrid,
+  .adminCategoriesList {
+    grid-template-columns: 1fr;
+  }
+
+  .adminProductFormButtons,
+  .adminCategoryFormButtons {
+    flex-direction: column;
+  }
+
+  .adminProductFormButtons button,
+  .adminCategoryFormButtons button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 650px) {
+  .adminLoginCard {
+    padding: 27px 20px;
+  }
+
+  .adminTopBar {
+    padding: 13px 16px;
+  }
+
+  .adminCards {
+    grid-template-columns: 1fr;
+  }
+}

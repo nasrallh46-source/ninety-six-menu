@@ -1,0 +1,221 @@
+.adminLoading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  font-family: 'Cairo', sans-serif;
+  background: #1d0c23;
+  color: #fff;
+}
+
+.adminLoginPage {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  font-family: 'Cairo', sans-serif;
+  background:
+    linear-gradient(rgba(25, 8, 33, 0.82), rgba(25, 8, 33, 0.9)),
+    url('./assets/background.jpeg') center/cover no-repeat;
+}
+
+.adminLoginCard {
+  width: min(430px, 100%);
+  padding: 36px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
+}
+
+.adminBrand {
+  margin-bottom: 25px;
+  text-align: center;
+  color: #4b1c59;
+}
+
+.adminBrand span {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.adminBrand small {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+}
+
+.adminLoginCard h1 {
+  margin: 0;
+  color: #2d1035;
+  font-size: 27px;
+}
+
+.adminLoginCard > p {
+  margin: 8px 0 25px;
+  color: #74647a;
+}
+
+.adminLoginCard label {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 18px;
+  color: #43204d;
+  font-weight: 600;
+}
+
+.adminLoginCard input {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid #d9cfe0;
+  border-radius: 12px;
+  background: #fff;
+  font: inherit;
+  outline: none;
+}
+
+.adminLoginCard input:focus {
+  border-color: #6b317d;
+  box-shadow: 0 0 0 3px rgba(107, 49, 125, 0.12);
+}
+
+.adminLoginCard button,
+.adminTopBar button {
+  border: 0;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+}
+
+.adminLoginCard button {
+  width: 100%;
+  padding: 13px;
+  border-radius: 12px;
+  color: #fff;
+  background: #542065;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.adminLoginCard button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.adminError {
+  margin-bottom: 15px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: #a01616;
+  background: #ffeaea;
+}
+
+.backToMenu {
+  display: block;
+  margin-top: 18px;
+  text-align: center;
+  color: #6c5873;
+  text-decoration: none;
+}
+
+.adminDashboard {
+  min-height: 100vh;
+  padding-bottom: 50px;
+  font-family: 'Cairo', sans-serif;
+  background: #f5f1f6;
+  color: #291132;
+}
+
+.adminTopBar {
+  min-height: 76px;
+  padding: 14px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  background: #2c1035;
+}
+
+.adminTopBar div {
+  display: flex;
+  flex-direction: column;
+}
+
+.adminTopBar strong {
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 2px;
+}
+
+.adminTopBar span {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.adminTopBar button {
+  padding: 9px 16px;
+  border-radius: 10px;
+  color: #2c1035;
+  background: #fff;
+  font-weight: 700;
+}
+
+.adminWelcome {
+  width: min(1100px, calc(100% - 34px));
+  margin: 45px auto 25px;
+}
+
+.adminWelcome h1 {
+  margin: 0;
+  font-size: 34px;
+}
+
+.adminWelcome p {
+  margin: 5px 0 0;
+  color: #7a687f;
+}
+
+.adminCards {
+  width: min(1100px, calc(100% - 34px));
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.adminCards article {
+  padding: 25px;
+  border: 1px solid rgba(74, 30, 86, 0.08);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 12px 35px rgba(58, 18, 70, 0.07);
+}
+
+.adminCards h2 {
+  margin: 0 0 8px;
+}
+
+.adminCards p {
+  margin: 0;
+  color: #78667d;
+}
+.adminDashboardError {
+  width: min(1100px, calc(100% - 34px));
+  margin: 0 auto 20px;
+  padding: 12px 15px;
+  border-radius: 10px;
+  color: #a01616;
+  background: #ffeaea;
+}
+@media (max-width: 650px) {
+  .adminLoginCard {
+    padding: 27px 20px;
+  }
+
+  .adminTopBar {
+    padding: 13px 16px;
+  }
+
+  .adminCards {
+    grid-template-columns: 1fr;
+  }
+}
