@@ -27,7 +27,42 @@ const defaultSiteSettings = {
   descriptionAr: 'تصفح قائمتنا واستمتع بمشروبك المفضل.',
   workingHours: '8:00 AM – 2:00 AM',
   footerText: 'NINETY SIX DEGREES CAFE',
+  currency: 'BD',
+  showPrices: true,
 }
+
+const defaultThemeSettings = {
+  heroBackgroundUrl: '',
+  logoUrl: '',
+  pageBackgroundColor: '#f7f3f8',
+  primaryColor: '#582369',
+  buttonColor: '#542065',
+  priceBackgroundColor: '#582369',
+  priceTextColor: '#ffffff',
+  headingColor: '#35123f',
+  textColor: '#26132e',
+  mutedTextColor: '#77637d',
+  navigationBackgroundColor: '#ffffff',
+  footerBackgroundColor: '#28102f',
+  arabicFont: 'Cairo',
+  englishFont: 'Montserrat',
+  heroOverlayOpacity: 0.68,
+}
+
+const defaultContactSettings = {
+  phone: '',
+  whatsapp: '',
+  googleMapsUrl: '',
+  instagramUrl: '',
+  tiktokUrl: '',
+  snapchatUrl: '',
+  xUrl: '',
+  facebookUrl: '',
+}
+
+const currencyOptions = ['BD', 'SAR', 'AED', 'KWD', 'OMR', 'USD']
+const arabicFontOptions = ['Cairo', 'Tajawal', 'Almarai']
+const englishFontOptions = ['Montserrat', 'Poppins', 'Arial']
 
 function convertGoogleDriveLink(url) {
   if (!url) return ''
@@ -126,6 +161,9 @@ function Admin() {
   const [workingHours, setWorkingHours] = useState('')
   const [footerText, setFooterText] = useState('')
 
+  const [currency, setCurrency] = useState('BD')
+  const [showPrices, setShowPrices] = useState(true)
+
   const [savingSettings, setSavingSettings] = useState(false)
 
   const [showCategories, setShowCategories] = useState(false)
@@ -135,12 +173,75 @@ function Admin() {
   const [categoryNameEn, setCategoryNameEn] = useState('')
   const [categoryNameAr, setCategoryNameAr] = useState('')
   const [categoryOrder, setCategoryOrder] = useState(1)
+  const [categoryVisible, setCategoryVisible] = useState(true)
   const [savingCategory, setSavingCategory] = useState(false)
   const [categorySuccessMessage, setCategorySuccessMessage] = useState('')
+
+  const [themeLoading, setThemeLoading] = useState(false)
+  const [themeMessage, setThemeMessage] = useState('')
+  const [savingTheme, setSavingTheme] = useState(false)
+
+  const [heroBackgroundUrl, setHeroBackgroundUrl] = useState('')
+  const [logoUrl, setLogoUrl] = useState('')
+  const [pageBackgroundColor, setPageBackgroundColor] = useState(
+    defaultThemeSettings.pageBackgroundColor,
+  )
+  const [primaryColor, setPrimaryColor] = useState(
+    defaultThemeSettings.primaryColor,
+  )
+  const [buttonColor, setButtonColor] = useState(
+    defaultThemeSettings.buttonColor,
+  )
+  const [priceBackgroundColor, setPriceBackgroundColor] = useState(
+    defaultThemeSettings.priceBackgroundColor,
+  )
+  const [priceTextColor, setPriceTextColor] = useState(
+    defaultThemeSettings.priceTextColor,
+  )
+  const [headingColor, setHeadingColor] = useState(
+    defaultThemeSettings.headingColor,
+  )
+  const [textColor, setTextColor] = useState(
+    defaultThemeSettings.textColor,
+  )
+  const [mutedTextColor, setMutedTextColor] = useState(
+    defaultThemeSettings.mutedTextColor,
+  )
+  const [navigationBackgroundColor, setNavigationBackgroundColor] =
+    useState(defaultThemeSettings.navigationBackgroundColor)
+  const [footerBackgroundColor, setFooterBackgroundColor] = useState(
+    defaultThemeSettings.footerBackgroundColor,
+  )
+  const [arabicFont, setArabicFont] = useState(
+    defaultThemeSettings.arabicFont,
+  )
+  const [englishFont, setEnglishFont] = useState(
+    defaultThemeSettings.englishFont,
+  )
+  const [heroOverlayOpacity, setHeroOverlayOpacity] = useState(
+    defaultThemeSettings.heroOverlayOpacity,
+  )
+  const [heroImageError, setHeroImageError] = useState(false)
+  const [logoImageError, setLogoImageError] = useState(false)
+
+  const [contactLoading, setContactLoading] = useState(false)
+  const [contactMessage, setContactMessage] = useState('')
+  const [savingContact, setSavingContact] = useState(false)
+
+  const [phone, setPhone] = useState('')
+  const [whatsapp, setWhatsapp] = useState('')
+  const [googleMapsUrl, setGoogleMapsUrl] = useState('')
+  const [instagramUrl, setInstagramUrl] = useState('')
+  const [tiktokUrl, setTiktokUrl] = useState('')
+  const [snapchatUrl, setSnapchatUrl] = useState('')
+  const [xUrl, setXUrl] = useState('')
+  const [facebookUrl, setFacebookUrl] = useState('')
 
   const productFormRef = useRef(null)
   const categoryFormRef = useRef(null)
   const siteSettingsRef = useRef(null)
+  const themeRef = useRef(null)
+  const contactRef = useRef(null)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -184,12 +285,32 @@ function Admin() {
     }
   }, [showSiteSettings])
 
+  useEffect(() => {
+    if (view === 'theme' && themeRef.current) {
+      themeRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
+  }, [view])
+
+  useEffect(() => {
+    if (view === 'contact' && contactRef.current) {
+      contactRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
+  }, [view])
+
   function clearMessages() {
     setError('')
     setUploadMessage('')
     setSettingsMessage('')
     setProductSuccessMessage('')
     setCategorySuccessMessage('')
+    setThemeMessage('')
+    setContactMessage('')
   }
 
   function closeAllSections() {
@@ -474,6 +595,7 @@ function Admin() {
     setCategoryNameEn('')
     setCategoryNameAr('')
     setCategoryOrder(categories.length + 1)
+    setCategoryVisible(true)
   }
 
   async function openCategories() {
@@ -496,6 +618,22 @@ function Admin() {
     await loadSiteSettings()
   }
 
+  async function openTheme() {
+    closeAllSections()
+    clearMessages()
+    setView('theme')
+
+    await loadThemeSettings()
+  }
+
+  async function openContact() {
+    closeAllSections()
+    clearMessages()
+    setView('contact')
+
+    await loadContactSettings()
+  }
+
   function openNewCategory() {
     resetCategoryForm()
     setShowCategoryForm(true)
@@ -508,6 +646,7 @@ function Admin() {
     setCategoryNameEn(category.nameEn || '')
     setCategoryNameAr(category.nameAr || '')
     setCategoryOrder(category.order || 1)
+    setCategoryVisible(category.visible !== false)
     setShowCategoryForm(true)
     setError('')
     setCategorySuccessMessage('')
@@ -541,6 +680,7 @@ function Admin() {
           nameEn: categoryNameEn.trim(),
           nameAr: categoryNameAr.trim(),
           order: Number(categoryOrder) || 1,
+          visible: categoryVisible,
         },
         { merge: true },
       )
@@ -601,6 +741,28 @@ function Admin() {
     }
   }
 
+  async function toggleCategoryVisibility(category) {
+    setError('')
+    setCategorySuccessMessage('')
+
+    try {
+      await setDoc(
+        doc(db, 'categories', category.id),
+        {
+          visible: category.visible === false,
+        },
+        { merge: true },
+      )
+
+      await loadProducts(false)
+
+      setCategorySuccessMessage('تم تغيير حالة ظهور القسم')
+    } catch (visibilityError) {
+      console.error(visibilityError)
+      setError('تعذر تغيير حالة القسم')
+    }
+  }
+
   async function loadSiteSettings() {
     setSettingsLoading(true)
     setSettingsMessage('')
@@ -638,6 +800,14 @@ function Admin() {
       setFooterText(
         data.footerText ?? defaultSiteSettings.footerText,
       )
+      setCurrency(
+        data.currency ?? defaultSiteSettings.currency,
+      )
+      setShowPrices(
+        data.showPrices !== undefined
+          ? data.showPrices
+          : defaultSiteSettings.showPrices,
+      )
     } catch (settingsError) {
       console.error(settingsError)
       setError('تعذر تحميل إعدادات الموقع')
@@ -665,6 +835,8 @@ function Admin() {
           descriptionAr: descriptionAr.trim(),
           workingHours: workingHours.trim(),
           footerText: footerText.trim(),
+          currency,
+          showPrices,
         },
         { merge: true },
       )
@@ -675,6 +847,190 @@ function Admin() {
       setError('صار خطأ أثناء حفظ إعدادات الموقع')
     } finally {
       setSavingSettings(false)
+    }
+  }
+
+  async function loadThemeSettings() {
+    setThemeLoading(true)
+    setThemeMessage('')
+
+    try {
+      const themeDoc = await getDoc(
+        doc(db, 'themeSettings', 'main'),
+      )
+
+      const data = themeDoc.exists() ? themeDoc.data() : {}
+
+      setHeroBackgroundUrl(
+        data.heroBackgroundUrl ?? defaultThemeSettings.heroBackgroundUrl,
+      )
+      setLogoUrl(data.logoUrl ?? defaultThemeSettings.logoUrl)
+      setPageBackgroundColor(
+        data.pageBackgroundColor ??
+          defaultThemeSettings.pageBackgroundColor,
+      )
+      setPrimaryColor(
+        data.primaryColor ?? defaultThemeSettings.primaryColor,
+      )
+      setButtonColor(
+        data.buttonColor ?? defaultThemeSettings.buttonColor,
+      )
+      setPriceBackgroundColor(
+        data.priceBackgroundColor ??
+          defaultThemeSettings.priceBackgroundColor,
+      )
+      setPriceTextColor(
+        data.priceTextColor ?? defaultThemeSettings.priceTextColor,
+      )
+      setHeadingColor(
+        data.headingColor ?? defaultThemeSettings.headingColor,
+      )
+      setTextColor(data.textColor ?? defaultThemeSettings.textColor)
+      setMutedTextColor(
+        data.mutedTextColor ?? defaultThemeSettings.mutedTextColor,
+      )
+      setNavigationBackgroundColor(
+        data.navigationBackgroundColor ??
+          defaultThemeSettings.navigationBackgroundColor,
+      )
+      setFooterBackgroundColor(
+        data.footerBackgroundColor ??
+          defaultThemeSettings.footerBackgroundColor,
+      )
+      setArabicFont(
+        data.arabicFont ?? defaultThemeSettings.arabicFont,
+      )
+      setEnglishFont(
+        data.englishFont ?? defaultThemeSettings.englishFont,
+      )
+      setHeroOverlayOpacity(
+        data.heroOverlayOpacity !== undefined
+          ? data.heroOverlayOpacity
+          : defaultThemeSettings.heroOverlayOpacity,
+      )
+      setHeroImageError(false)
+      setLogoImageError(false)
+    } catch (themeError) {
+      console.error(themeError)
+      setError('تعذر تحميل إعدادات المظهر')
+    } finally {
+      setThemeLoading(false)
+    }
+  }
+
+  async function saveThemeSettings(event) {
+    event.preventDefault()
+
+    setSavingTheme(true)
+    setError('')
+    setThemeMessage('')
+
+    try {
+      const finalHeroBackgroundUrl = convertGoogleDriveLink(
+        heroBackgroundUrl.trim(),
+      )
+      const finalLogoUrl = convertGoogleDriveLink(logoUrl.trim())
+
+      await setDoc(
+        doc(db, 'themeSettings', 'main'),
+        {
+          heroBackgroundUrl: finalHeroBackgroundUrl,
+          logoUrl: finalLogoUrl,
+          pageBackgroundColor,
+          primaryColor,
+          buttonColor,
+          priceBackgroundColor,
+          priceTextColor,
+          headingColor,
+          textColor,
+          mutedTextColor,
+          navigationBackgroundColor,
+          footerBackgroundColor,
+          arabicFont,
+          englishFont,
+          heroOverlayOpacity: Number(heroOverlayOpacity),
+        },
+        { merge: true },
+      )
+
+      setHeroBackgroundUrl(finalHeroBackgroundUrl)
+      setLogoUrl(finalLogoUrl)
+
+      setThemeMessage('تم حفظ إعدادات المظهر بنجاح')
+    } catch (saveError) {
+      console.error(saveError)
+      setError('صار خطأ أثناء حفظ إعدادات المظهر')
+    } finally {
+      setSavingTheme(false)
+    }
+  }
+
+  async function loadContactSettings() {
+    setContactLoading(true)
+    setContactMessage('')
+
+    try {
+      const contactDoc = await getDoc(
+        doc(db, 'contactSettings', 'main'),
+      )
+
+      const data = contactDoc.exists() ? contactDoc.data() : {}
+
+      setPhone(data.phone ?? defaultContactSettings.phone)
+      setWhatsapp(data.whatsapp ?? defaultContactSettings.whatsapp)
+      setGoogleMapsUrl(
+        data.googleMapsUrl ?? defaultContactSettings.googleMapsUrl,
+      )
+      setInstagramUrl(
+        data.instagramUrl ?? defaultContactSettings.instagramUrl,
+      )
+      setTiktokUrl(
+        data.tiktokUrl ?? defaultContactSettings.tiktokUrl,
+      )
+      setSnapchatUrl(
+        data.snapchatUrl ?? defaultContactSettings.snapchatUrl,
+      )
+      setXUrl(data.xUrl ?? defaultContactSettings.xUrl)
+      setFacebookUrl(
+        data.facebookUrl ?? defaultContactSettings.facebookUrl,
+      )
+    } catch (contactError) {
+      console.error(contactError)
+      setError('تعذر تحميل بيانات التواصل')
+    } finally {
+      setContactLoading(false)
+    }
+  }
+
+  async function saveContactSettings(event) {
+    event.preventDefault()
+
+    setSavingContact(true)
+    setError('')
+    setContactMessage('')
+
+    try {
+      await setDoc(
+        doc(db, 'contactSettings', 'main'),
+        {
+          phone: phone.trim(),
+          whatsapp: whatsapp.trim(),
+          googleMapsUrl: googleMapsUrl.trim(),
+          instagramUrl: instagramUrl.trim(),
+          tiktokUrl: tiktokUrl.trim(),
+          snapchatUrl: snapchatUrl.trim(),
+          xUrl: xUrl.trim(),
+          facebookUrl: facebookUrl.trim(),
+        },
+        { merge: true },
+      )
+
+      setContactMessage('تم حفظ بيانات التواصل بنجاح')
+    } catch (saveError) {
+      console.error(saveError)
+      setError('صار خطأ أثناء حفظ بيانات التواصل')
+    } finally {
+      setSavingContact(false)
     }
   }
 
@@ -711,7 +1067,7 @@ function Admin() {
 
   async function uploadMenu() {
     const confirmed = window.confirm(
-      'سيتم رفع أو تحديث بيانات المنيو الأساسية في Firebase. لن يتم حذف الصور أو حالة الظهور الحالية للمنتجات الموجودة. هل تريد المتابعة؟',
+      'سيتم رفع أو تحديث بيانات المنيو الأساسية في Firebase. لن يتم حذف الصور أو حالة الظهور الحالية للمنتجات أو الأقسام الموجودة. هل تريد المتابعة؟',
     )
 
     if (!confirmed) return
@@ -728,15 +1084,26 @@ function Admin() {
       ) {
         const section = menuSections[sectionIndex]
 
-        await setDoc(
-          doc(db, 'categories', section.id),
-          {
-            nameEn: section.titleEn,
-            nameAr: section.titleAr,
-            order: sectionIndex + 1,
-          },
-          { merge: true },
-        )
+        const categoryRef = doc(db, 'categories', section.id)
+        const existingCategorySnap = await getDoc(categoryRef)
+        const existingCategoryData = existingCategorySnap.exists()
+          ? existingCategorySnap.data()
+          : null
+
+        const categoryData = {
+          nameEn: section.titleEn,
+          nameAr: section.titleAr,
+          order: sectionIndex + 1,
+        }
+
+        if (
+          !existingCategoryData ||
+          existingCategoryData.visible === undefined
+        ) {
+          categoryData.visible = true
+        }
+
+        await setDoc(categoryRef, categoryData, { merge: true })
 
         for (
           let productIndex = 0;
@@ -888,6 +1255,12 @@ function Admin() {
     productImageUrl.trim(),
   )
 
+  const heroPreviewUrl = convertGoogleDriveLink(
+    heroBackgroundUrl.trim(),
+  )
+
+  const logoPreviewUrl = convertGoogleDriveLink(logoUrl.trim())
+
   return (
     <main className="adminDashboard" dir="rtl">
       <header className="adminTopBar">
@@ -956,20 +1329,33 @@ function Admin() {
               </p>
             </article>
 
-            <article className="adminCardDisabled">
-              <h2>الصور</h2>
-              <p>
-                تدار صور المنتجات من خلال حقل رابط الصورة (Image URL) الموجود داخل كل منتج.
-              </p>
-            </article>
-
             <article
               onClick={openSiteSettings}
               style={{ cursor: 'pointer' }}
             >
               <h2>إعدادات الموقع</h2>
               <p>
-                تعديل اسم الكوفي والترحيب والوصف وساعات العمل.
+                تعديل اسم الكوفي والترحيب والوصف وساعات العمل والعملة.
+              </p>
+            </article>
+
+            <article
+              onClick={openTheme}
+              style={{ cursor: 'pointer' }}
+            >
+              <h2>المظهر</h2>
+              <p>
+                تعديل الشعار وخلفية الهيدر والألوان والخطوط.
+              </p>
+            </article>
+
+            <article
+              onClick={openContact}
+              style={{ cursor: 'pointer' }}
+            >
+              <h2>التواصل</h2>
+              <p>
+                تعديل رقم الهاتف والواتساب وروابط التواصل الاجتماعي.
               </p>
             </article>
           </section>
@@ -1103,6 +1489,35 @@ function Admin() {
                     }
                   />
                 </label>
+
+                <label>
+                  العملة
+
+                  <select
+                    value={currency}
+                    onChange={(event) =>
+                      setCurrency(event.target.value)
+                    }
+                  >
+                    {currencyOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="productVisibleLabel">
+                  <input
+                    type="checkbox"
+                    checked={showPrices}
+                    onChange={(event) =>
+                      setShowPrices(event.target.checked)
+                    }
+                  />
+
+                  إظهار الأسعار في المنيو
+                </label>
               </div>
 
               {settingsMessage && (
@@ -1119,6 +1534,469 @@ function Admin() {
                   {savingSettings
                     ? 'جاري الحفظ...'
                     : 'حفظ الإعدادات'}
+                </button>
+              </div>
+            </form>
+          )}
+        </section>
+      )}
+
+      {view === 'theme' && (
+        <section
+          className="adminThemeSection"
+          ref={themeRef}
+        >
+          <div className="adminProductsHeader">
+            <div>
+              <h2>المظهر</h2>
+              <p>تعديل الشعار وخلفية الهيدر والألوان والخطوط.</p>
+            </div>
+
+            <button
+              type="button"
+              onClick={goToDashboard}
+            >
+              الرجوع للوحة الرئيسية
+            </button>
+          </div>
+
+          {error && (
+            <div className="adminDashboardError">
+              {error}
+            </div>
+          )}
+
+          {themeLoading ? (
+            <p>جاري تحميل إعدادات المظهر...</p>
+          ) : (
+            <form
+              className="adminThemeForm"
+              onSubmit={saveThemeSettings}
+            >
+              <div className="adminSiteSettingsGrid">
+                <label className="adminImageUrlLabel">
+                  رابط خلفية الهيدر
+
+                  <input
+                    type="text"
+                    value={heroBackgroundUrl}
+                    onChange={(event) => {
+                      setHeroBackgroundUrl(event.target.value)
+                      setHeroImageError(false)
+                    }}
+                    placeholder="https://... أو رابط Google Drive"
+                  />
+                </label>
+
+                <label className="adminImageUrlLabel">
+                  رابط الشعار
+
+                  <input
+                    type="text"
+                    value={logoUrl}
+                    onChange={(event) => {
+                      setLogoUrl(event.target.value)
+                      setLogoImageError(false)
+                    }}
+                    placeholder="https://... أو رابط Google Drive"
+                  />
+                </label>
+              </div>
+
+              <div className="adminImagePreview">
+                {heroPreviewUrl && !heroImageError ? (
+                  <img
+                    className="adminCurrentProductImage"
+                    src={heroPreviewUrl}
+                    alt="معاينة خلفية الهيدر"
+                    onError={() => setHeroImageError(true)}
+                  />
+                ) : (
+                  <div className="adminImagePlaceholder">
+                    لا توجد خلفية
+                  </div>
+                )}
+
+                {logoPreviewUrl && !logoImageError ? (
+                  <img
+                    className="adminCurrentProductImage"
+                    src={logoPreviewUrl}
+                    alt="معاينة الشعار"
+                    onError={() => setLogoImageError(true)}
+                  />
+                ) : (
+                  <div className="adminImagePlaceholder">
+                    لا يوجد شعار
+                  </div>
+                )}
+              </div>
+
+              <div className="adminSiteSettingsGrid">
+                <label>
+                  لون خلفية الصفحة
+
+                  <div className="adminColorInputRow">
+                    <input
+                      type="color"
+                      value={pageBackgroundColor}
+                      onChange={(event) =>
+                        setPageBackgroundColor(event.target.value)
+                      }
+                    />
+                    <span>{pageBackgroundColor}</span>
+                  </div>
+                </label>
+
+                <label>
+                  اللون الأساسي
+
+                  <div className="adminColorInputRow">
+                    <input
+                      type="color"
+                      value={primaryColor}
+                      onChange={(event) =>
+                        setPrimaryColor(event.target.value)
+                      }
+                    />
+                    <span>{primaryColor}</span>
+                  </div>
+                </label>
+
+                <label>
+                  لون الأزرار
+
+                  <div className="adminColorInputRow">
+                    <input
+                      type="color"
+                      value={buttonColor}
+                      onChange={(event) =>
+                        setButtonColor(event.target.value)
+                      }
+                    />
+                    <span>{buttonColor}</span>
+                  </div>
+                </label>
+
+                <label>
+                  لون خلفية السعر
+
+                  <div className="adminColorInputRow">
+                    <input
+                      type="color"
+                      value={priceBackgroundColor}
+                      onChange={(event) =>
+                        setPriceBackgroundColor(event.target.value)
+                      }
+                    />
+                    <span>{priceBackgroundColor}</span>
+                  </div>
+                </label>
+
+                <label>
+                  لون نص السعر
+
+                  <div className="adminColorInputRow">
+                    <input
+                      type="color"
+                      value={priceTextColor}
+                      onChange={(event) =>
+                        setPriceTextColor(event.target.value)
+                      }
+                    />
+                    <span>{priceTextColor}</span>
+                  </div>
+                </label>
+
+                <label>
+                  لون العناوين
+
+                  <div className="adminColorInputRow">
+                    <input
+                      type="color"
+                      value={headingColor}
+                      onChange={(event) =>
+                        setHeadingColor(event.target.value)
+                      }
+                    />
+                    <span>{headingColor}</span>
+                  </div>
+                </label>
+
+                <label>
+                  لون النصوص
+
+                  <div className="adminColorInputRow">
+                    <input
+                      type="color"
+                      value={textColor}
+                      onChange={(event) =>
+                        setTextColor(event.target.value)
+                      }
+                    />
+                    <span>{textColor}</span>
+                  </div>
+                </label>
+
+                <label>
+                  لون النصوص الثانوية
+
+                  <div className="adminColorInputRow">
+                    <input
+                      type="color"
+                      value={mutedTextColor}
+                      onChange={(event) =>
+                        setMutedTextColor(event.target.value)
+                      }
+                    />
+                    <span>{mutedTextColor}</span>
+                  </div>
+                </label>
+
+                <label>
+                  لون خلفية شريط التنقل
+
+                  <div className="adminColorInputRow">
+                    <input
+                      type="color"
+                      value={navigationBackgroundColor}
+                      onChange={(event) =>
+                        setNavigationBackgroundColor(event.target.value)
+                      }
+                    />
+                    <span>{navigationBackgroundColor}</span>
+                  </div>
+                </label>
+
+                <label>
+                  لون خلفية الفوتر
+
+                  <div className="adminColorInputRow">
+                    <input
+                      type="color"
+                      value={footerBackgroundColor}
+                      onChange={(event) =>
+                        setFooterBackgroundColor(event.target.value)
+                      }
+                    />
+                    <span>{footerBackgroundColor}</span>
+                  </div>
+                </label>
+
+                <label>
+                  الخط العربي
+
+                  <select
+                    value={arabicFont}
+                    onChange={(event) =>
+                      setArabicFont(event.target.value)
+                    }
+                  >
+                    {arabicFontOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label>
+                  الخط الإنجليزي
+
+                  <select
+                    value={englishFont}
+                    onChange={(event) =>
+                      setEnglishFont(event.target.value)
+                    }
+                  >
+                    {englishFontOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+              <label>
+                شفافية تغطية الهيدر: {heroOverlayOpacity}
+
+                <input
+                  type="range"
+                  min="0"
+                  max="0.9"
+                  step="0.05"
+                  value={heroOverlayOpacity}
+                  onChange={(event) =>
+                    setHeroOverlayOpacity(event.target.value)
+                  }
+                />
+              </label>
+
+              {themeMessage && (
+                <p className="uploadSuccess">
+                  {themeMessage}
+                </p>
+              )}
+
+              <div className="adminProductFormButtons">
+                <button
+                  type="submit"
+                  disabled={savingTheme}
+                >
+                  {savingTheme
+                    ? 'جاري الحفظ...'
+                    : 'حفظ إعدادات المظهر'}
+                </button>
+              </div>
+            </form>
+          )}
+        </section>
+      )}
+
+      {view === 'contact' && (
+        <section
+          className="adminContactSection"
+          ref={contactRef}
+        >
+          <div className="adminProductsHeader">
+            <div>
+              <h2>التواصل</h2>
+              <p>تعديل رقم الهاتف والواتساب وروابط التواصل الاجتماعي.</p>
+            </div>
+
+            <button
+              type="button"
+              onClick={goToDashboard}
+            >
+              الرجوع للوحة الرئيسية
+            </button>
+          </div>
+
+          {error && (
+            <div className="adminDashboardError">
+              {error}
+            </div>
+          )}
+
+          {contactLoading ? (
+            <p>جاري تحميل بيانات التواصل...</p>
+          ) : (
+            <form
+              className="adminContactForm"
+              onSubmit={saveContactSettings}
+            >
+              <div className="adminSiteSettingsGrid">
+                <label>
+                  رقم الهاتف
+
+                  <input
+                    type="text"
+                    value={phone}
+                    onChange={(event) =>
+                      setPhone(event.target.value)
+                    }
+                  />
+                </label>
+
+                <label>
+                  رقم الواتساب
+
+                  <input
+                    type="text"
+                    value={whatsapp}
+                    onChange={(event) =>
+                      setWhatsapp(event.target.value)
+                    }
+                  />
+                </label>
+
+                <label>
+                  رابط خرائط جوجل
+
+                  <input
+                    type="text"
+                    value={googleMapsUrl}
+                    onChange={(event) =>
+                      setGoogleMapsUrl(event.target.value)
+                    }
+                  />
+                </label>
+
+                <label>
+                  رابط انستغرام
+
+                  <input
+                    type="text"
+                    value={instagramUrl}
+                    onChange={(event) =>
+                      setInstagramUrl(event.target.value)
+                    }
+                  />
+                </label>
+
+                <label>
+                  رابط تيك توك
+
+                  <input
+                    type="text"
+                    value={tiktokUrl}
+                    onChange={(event) =>
+                      setTiktokUrl(event.target.value)
+                    }
+                  />
+                </label>
+
+                <label>
+                  رابط سناب شات
+
+                  <input
+                    type="text"
+                    value={snapchatUrl}
+                    onChange={(event) =>
+                      setSnapchatUrl(event.target.value)
+                    }
+                  />
+                </label>
+
+                <label>
+                  رابط اكس (تويتر)
+
+                  <input
+                    type="text"
+                    value={xUrl}
+                    onChange={(event) =>
+                      setXUrl(event.target.value)
+                    }
+                  />
+                </label>
+
+                <label>
+                  رابط فيسبوك
+
+                  <input
+                    type="text"
+                    value={facebookUrl}
+                    onChange={(event) =>
+                      setFacebookUrl(event.target.value)
+                    }
+                  />
+                </label>
+              </div>
+
+              {contactMessage && (
+                <p className="uploadSuccess">
+                  {contactMessage}
+                </p>
+              )}
+
+              <div className="adminProductFormButtons">
+                <button
+                  type="submit"
+                  disabled={savingContact}
+                >
+                  {savingContact
+                    ? 'جاري الحفظ...'
+                    : 'حفظ بيانات التواصل'}
                 </button>
               </div>
             </form>
@@ -1410,7 +2288,7 @@ function Admin() {
                             </small>
                           </td>
 
-                          <td>{product.price} BD</td>
+                          <td>{product.price} {currency}</td>
 
                           <td>
                             <button
@@ -1551,6 +2429,18 @@ function Admin() {
                     }
                   />
                 </label>
+
+                <label className="productVisibleLabel">
+                  <input
+                    type="checkbox"
+                    checked={categoryVisible}
+                    onChange={(event) =>
+                      setCategoryVisible(event.target.checked)
+                    }
+                  />
+
+                  إظهار القسم في المنيو
+                </label>
               </div>
 
               <div className="adminCategoryFormButtons">
@@ -1596,6 +2486,22 @@ function Admin() {
                   </div>
 
                   <div className="adminCategoryActions">
+                    <button
+                      type="button"
+                      className={
+                        category.visible === false
+                          ? 'productHiddenButton'
+                          : 'productVisibleButton'
+                      }
+                      onClick={() =>
+                        toggleCategoryVisibility(category)
+                      }
+                    >
+                      {category.visible === false
+                        ? 'مخفي'
+                        : 'ظاهر'}
+                    </button>
+
                     <button
                       type="button"
                       onClick={() =>

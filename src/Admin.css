@@ -138,6 +138,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
   color: #fff;
   background: #2c1035;
 }
@@ -193,8 +195,9 @@
   width: min(1100px, calc(100% - 34px));
   margin: auto;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 18px;
+  align-items: stretch;
 }
 
 .adminCards article {
@@ -205,6 +208,9 @@
   box-shadow: 0 12px 35px rgba(58, 18, 70, 0.07);
   cursor: pointer;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .adminCards article:hover {
@@ -362,6 +368,7 @@
   border-radius: 10px;
   font-family: 'Cairo', sans-serif;
   outline: none;
+  background: #fff;
 }
 
 .adminProductFormGrid input:focus,
@@ -369,6 +376,11 @@
 .adminProductFormGrid textarea:focus {
   border-color: #6b317d;
   box-shadow: 0 0 0 3px rgba(107, 49, 125, 0.12);
+}
+
+.adminProductFormGrid select {
+  cursor: pointer;
+  appearance: auto;
 }
 
 .productVisibleLabel {
@@ -391,6 +403,7 @@
   align-items: center;
   gap: 14px;
   margin-top: 14px;
+  flex-wrap: wrap;
 }
 
 .adminCurrentProductImage {
@@ -643,18 +656,25 @@
   color: #43204d;
 }
 
-.adminCategoryFormGrid input {
+.adminCategoryFormGrid input,
+.adminCategoryFormGrid select {
   width: 100%;
   padding: 12px 13px;
   border: 1px solid #d9cfe0;
   border-radius: 10px;
   font-family: 'Cairo', sans-serif;
   outline: none;
+  background: #fff;
 }
 
-.adminCategoryFormGrid input:focus {
+.adminCategoryFormGrid input:focus,
+.adminCategoryFormGrid select:focus {
   border-color: #6b317d;
   box-shadow: 0 0 0 3px rgba(107, 49, 125, 0.12);
+}
+
+.adminCategoryFormGrid select {
+  cursor: pointer;
 }
 
 .adminCategoryFormButtons {
@@ -705,13 +725,15 @@
 }
 
 .adminSiteSettingsGrid input,
-.adminSiteSettingsGrid textarea {
+.adminSiteSettingsGrid textarea,
+.adminSiteSettingsGrid select {
   width: 100%;
   padding: 12px 13px;
   border: 1px solid #d9cfe0;
   border-radius: 10px;
   font-family: 'Cairo', sans-serif;
   outline: none;
+  background: #fff;
 }
 
 .adminSiteSettingsGrid textarea {
@@ -720,9 +742,18 @@
 }
 
 .adminSiteSettingsGrid input:focus,
-.adminSiteSettingsGrid textarea:focus {
+.adminSiteSettingsGrid textarea:focus,
+.adminSiteSettingsGrid select:focus {
   border-color: #6b317d;
   box-shadow: 0 0 0 3px rgba(107, 49, 125, 0.12);
+}
+
+.adminSiteSettingsGrid select {
+  cursor: pointer;
+}
+
+.adminSiteSettingsGrid label.adminFullWidthField {
+  grid-column: 1 / -1;
 }
 
 .adminSiteSettingsForm button {
@@ -741,6 +772,343 @@
 .adminSiteSettingsForm button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* ---------- Theme settings ---------- */
+
+.adminThemeSection {
+  width: min(1100px, calc(100% - 34px));
+  margin: 30px auto 0;
+}
+
+.adminThemeSection h2 {
+  margin: 0 0 5px;
+}
+
+.adminThemeSection > p {
+  margin: 0 0 18px;
+  color: #78667d;
+}
+
+.adminThemeForm {
+  padding: 22px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 35px rgba(58, 18, 70, 0.07);
+  display: grid;
+  gap: 16px;
+}
+
+.adminThemeForm > label {
+  display: grid;
+  gap: 7px;
+  font-weight: 600;
+  color: #43204d;
+}
+
+.adminThemeForm input[type="text"],
+.adminThemeForm input[type="url"],
+.adminThemeForm select {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid #d9cfe0;
+  border-radius: 10px;
+  font-family: 'Cairo', sans-serif;
+  outline: none;
+  background: #fff;
+}
+
+.adminThemeForm input[type="text"]:focus,
+.adminThemeForm input[type="url"]:focus,
+.adminThemeForm select:focus {
+  border-color: #6b317d;
+  box-shadow: 0 0 0 3px rgba(107, 49, 125, 0.12);
+}
+
+.adminThemeForm select {
+  cursor: pointer;
+}
+
+/* Hero opacity range field — plain label > input[type="range"], no extra classes required */
+.adminThemeForm input[type="range"] {
+  width: 100%;
+  height: 6px;
+  margin-top: 4px;
+  border-radius: 6px;
+  background: #e4dbe9;
+  outline: none;
+  cursor: pointer;
+  accent-color: #6b317d;
+}
+
+.adminThemeForm input[type="range"]:focus {
+  box-shadow: 0 0 0 3px rgba(107, 49, 125, 0.12);
+}
+
+/* Theme image previews reuse .adminImagePreview / .adminCurrentProductImage / .adminImagePlaceholder.
+   First preview block = hero background (wide, cover). Second preview block = logo (contain, smaller). */
+.adminThemeForm .adminImagePreview:nth-of-type(1) .adminCurrentProductImage,
+.adminThemeForm .adminImagePreview:nth-of-type(1) .adminImagePlaceholder {
+  width: 100%;
+  max-width: 480px;
+  height: 170px;
+}
+
+.adminThemeForm .adminImagePreview:nth-of-type(1) .adminCurrentProductImage {
+  object-fit: cover;
+}
+
+.adminThemeForm .adminImagePreview:nth-of-type(2) .adminCurrentProductImage,
+.adminThemeForm .adminImagePreview:nth-of-type(2) .adminImagePlaceholder {
+  width: 130px;
+  height: 130px;
+}
+
+.adminThemeForm .adminImagePreview:nth-of-type(2) .adminCurrentProductImage {
+  object-fit: contain;
+  padding: 8px;
+}
+
+.adminThemeForm button {
+  margin-top: 4px;
+  border: 0;
+  border-radius: 12px;
+  padding: 13px 20px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  background: #542065;
+  justify-self: start;
+  min-width: 160px;
+}
+
+.adminThemeForm button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Save button when rendered inside the shared .adminProductFormButtons wrapper */
+.adminThemeForm .adminProductFormButtons {
+  grid-column: auto;
+  margin-top: 4px;
+}
+
+/* ---------- Contact settings ---------- */
+
+.adminContactSection {
+  width: min(1100px, calc(100% - 34px));
+  margin: 30px auto 0;
+}
+
+.adminContactSection h2 {
+  margin: 0 0 5px;
+}
+
+.adminContactSection > p {
+  margin: 0 0 18px;
+  color: #78667d;
+}
+
+/* .adminContactForm is a plain card wrapper; the actual two-column layout comes
+   from the shared .adminSiteSettingsGrid used inside it. */
+.adminContactForm {
+  padding: 22px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 35px rgba(58, 18, 70, 0.07);
+}
+
+.adminContactForm .adminSiteSettingsGrid {
+  margin-bottom: 16px;
+}
+
+.adminContactForm textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+/* Save button when rendered via the shared .adminProductFormButtons wrapper —
+   reset any grid spanning so it behaves like a normal flex button row. */
+.adminContactForm .adminProductFormButtons {
+  grid-column: auto;
+  margin-top: 4px;
+}
+
+/* Fallback: if a bare <button> is placed directly in .adminContactForm */
+.adminContactForm > button {
+  margin-top: 4px;
+  border: 0;
+  border-radius: 12px;
+  padding: 13px 20px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  background: #542065;
+  min-width: 160px;
+}
+
+.adminContactForm > button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---------- Color picker rows ---------- */
+
+.adminColorInputRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid #d9cfe0;
+  border-radius: 12px;
+  background: #f9f6fb;
+  direction: ltr;
+}
+
+.adminColorInputRow input[type="color"] {
+  width: 58px;
+  height: 42px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  background: none;
+  flex-shrink: 0;
+}
+
+.adminColorInputRow input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: 10px;
+}
+
+.adminColorInputRow input[type="color"]::-webkit-color-swatch {
+  border: 1px solid #e4dbe9;
+  border-radius: 10px;
+}
+
+.adminColorInputRow input[type="color"]::-moz-color-swatch {
+  border: 1px solid #e4dbe9;
+  border-radius: 10px;
+}
+
+/* Actual markup in Admin.jsx: <div class="adminColorInputRow"><input type="color"/><span>{hex}</span></div> */
+.adminColorInputRow span {
+  flex: 1;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #43204d;
+  text-transform: uppercase;
+  direction: ltr;
+  text-align: left;
+}
+
+/* Kept for compatibility if this class is ever used instead of/alongside the span */
+.adminColorHexValue {
+  flex: 1;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #43204d;
+  text-transform: uppercase;
+  direction: ltr;
+  text-align: left;
+}
+
+/* ---------- Optional helper classes (kept for compatibility, not required by Admin.jsx) ---------- */
+
+.adminRangeField {
+  display: grid;
+  gap: 7px;
+  font-weight: 600;
+  color: #43204d;
+}
+
+.adminRangeField input[type="range"] {
+  width: 100%;
+  height: 6px;
+  border-radius: 6px;
+  background: #e4dbe9;
+  outline: none;
+  cursor: pointer;
+  accent-color: #6b317d;
+}
+
+.adminRangeField input[type="range"]:focus {
+  box-shadow: 0 0 0 3px rgba(107, 49, 125, 0.12);
+}
+
+.adminRangeValue {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6b317d;
+}
+
+.adminThemePreviewGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.adminHeroPreview {
+  width: 100%;
+  min-height: 140px;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid #e4dbe9;
+  background: #f7f3f9;
+  display: block;
+}
+
+.adminLogoPreview {
+  width: 100%;
+  max-width: 120px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 14px;
+  border: 1px solid #e4dbe9;
+  background: #f7f3f9;
+  padding: 8px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* ---------- Loading / feedback messages ---------- */
+
+.adminLoadingText {
+  padding: 14px;
+  text-align: center;
+  color: #78667d;
+  font-weight: 600;
+}
+
+.adminSuccessMessage {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #e8f8ee;
+  color: #176b39;
+  text-align: center;
+  font-weight: 600;
+}
+
+.adminErrorMessage {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #ffeaea;
+  color: #a01616;
+  text-align: center;
+  font-weight: 600;
 }
 
 /* ---------- Responsive ---------- */
@@ -776,6 +1144,44 @@
   .adminProductFormButtons button,
   .adminCategoryFormButtons button {
     width: 100%;
+  }
+
+  .adminThemeForm button,
+  .adminContactForm > button {
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .adminThemeForm .adminProductFormButtons,
+  .adminContactForm .adminProductFormButtons {
+    flex-direction: column;
+  }
+
+  .adminThemeForm .adminProductFormButtons button,
+  .adminContactForm .adminProductFormButtons button {
+    width: 100%;
+  }
+
+  .adminThemeForm .adminImagePreview:nth-of-type(1) .adminCurrentProductImage,
+  .adminThemeForm .adminImagePreview:nth-of-type(1) .adminImagePlaceholder {
+    max-width: 100%;
+    height: 140px;
+  }
+
+  .adminThemePreviewGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .adminLogoPreview {
+    max-width: 100%;
+  }
+
+  .adminColorInputRow {
+    flex-wrap: wrap;
+  }
+
+  .adminCards {
+    grid-template-columns: 1fr;
   }
 }
 

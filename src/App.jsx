@@ -12,7 +12,6 @@ import Admin from './Admin.jsx'
 import { db } from './firebase.js'
 import { menuSections } from './menuData.js'
 
-
 const DEFAULT_SITE_SETTINGS = {
   siteNameEn: 'NINETY SIX',
   siteNameAr: 'ناينتي سيكس',
@@ -22,6 +21,37 @@ const DEFAULT_SITE_SETTINGS = {
   descriptionAr: 'تصفح قائمتنا واستمتع بمشروبك المفضل.',
   workingHours: '8:00 AM – 2:00 AM',
   footerText: 'NINETY SIX DEGREES CAFE',
+  currency: 'BD',
+  showPrices: true,
+}
+
+const DEFAULT_THEME_SETTINGS = {
+  heroBackgroundUrl: '',
+  logoUrl: '',
+  pageBackgroundColor: '#f7f3f8',
+  primaryColor: '#582369',
+  buttonColor: '#542065',
+  priceBackgroundColor: '#582369',
+  priceTextColor: '#ffffff',
+  headingColor: '#35123f',
+  textColor: '#26132e',
+  mutedTextColor: '#77637d',
+  navigationBackgroundColor: '#ffffff',
+  footerBackgroundColor: '#28102f',
+  arabicFont: 'Cairo',
+  englishFont: 'Montserrat',
+  heroOverlayOpacity: 0.68,
+}
+
+const DEFAULT_CONTACT_SETTINGS = {
+  phone: '',
+  whatsapp: '',
+  googleMapsUrl: '',
+  instagramUrl: '',
+  tiktokUrl: '',
+  snapchatUrl: '',
+  xUrl: '',
+  facebookUrl: '',
 }
 
 // Converts a Google Drive share/view link into a direct-viewable image URL.
@@ -62,9 +92,33 @@ function getDirectImageUrl(rawUrl) {
   return `https://lh3.googleusercontent.com/d/${fileId}`
 }
 
+// Removes spaces, plus signs, dashes and parentheses from a WhatsApp number.
+function normalizeWhatsappNumber(rawNumber) {
+  if (!rawNumber || typeof rawNumber !== 'string') {
+    return ''
+  }
+
+  return rawNumber
+    .replace(/\s+/g, '')
+    .replace(/\+/g, '')
+    .replace(/-/g, '')
+    .replace(/[()]/g, '')
+}
+
 function ProductImage({ src, alt, onClick, failed, onError }) {
   const resolvedSrc = getDirectImageUrl(src)
   const isClickable = Boolean(resolvedSrc) && !failed
+
+  function handleKeyDown(event) {
+    if (!isClickable) {
+      return
+    }
+
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      onClick()
+    }
+  }
 
   if (!resolvedSrc || failed) {
     return (
@@ -76,8 +130,11 @@ function ProductImage({ src, alt, onClick, failed, onError }) {
 
   return (
     <div
-      className="productImage"
+      className={`productImage${isClickable ? ' hasImage' : ''}`}
       onClick={isClickable ? onClick : undefined}
+      onKeyDown={isClickable ? handleKeyDown : undefined}
+      tabIndex={isClickable ? 0 : undefined}
+      role={isClickable ? 'button' : undefined}
       style={{ cursor: isClickable ? 'pointer' : 'default' }}
     >
       <img
@@ -115,55 +172,24 @@ function ImageLightbox({ imageUrl, alt, onClose }) {
   }
 
   return (
-    <div
-      className="lightboxOverlay"
-      onClick={onClose}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000,
-        padding: '20px',
-      }}
-    >
+    <div className="lightboxOverlay" onClick={onClose}>
       <button
         type="button"
+        className="lightboxCloseButton"
         onClick={(event) => {
           event.stopPropagation()
           onClose()
         }}
         aria-label="Close"
-        style={{
-          position: 'absolute',
-          top: '18px',
-          right: '18px',
-          background: 'rgba(255, 255, 255, 0.15)',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '50%',
-          width: '42px',
-          height: '42px',
-          fontSize: '22px',
-          lineHeight: 1,
-          cursor: 'pointer',
-        }}
       >
         ×
       </button>
 
       <img
+        className="lightboxImage"
         src={imageUrl}
         alt={alt}
         onClick={(event) => event.stopPropagation()}
-        style={{
-          maxWidth: '95%',
-          maxHeight: '90vh',
-          objectFit: 'contain',
-          borderRadius: '8px',
-        }}
       />
     </div>
   )
@@ -174,8 +200,13 @@ function App() {
   const [menuLoading, setMenuLoading] = useState(true)
   const [menuError, setMenuError] = useState('')
   const [siteSettings, setSiteSettings] = useState(DEFAULT_SITE_SETTINGS)
+  const [themeSettings, setThemeSettings] = useState(DEFAULT_THEME_SETTINGS)
+  const [contactSettings, setContactSettings] = useState(
+    DEFAULT_CONTACT_SETTINGS,
+  )
   const [lightboxImage, setLightboxImage] = useState(null)
   const [failedImages, setFailedImages] = useState({})
+  const [logoFailed, setLogoFailed] = useState(false)
 
   const isAdminPage = window.location.pathname === '/admin'
 
@@ -212,10 +243,93 @@ function App() {
             workingHours:
               data.workingHours ?? DEFAULT_SITE_SETTINGS.workingHours,
             footerText: data.footerText ?? DEFAULT_SITE_SETTINGS.footerText,
+            currency: data.currency ?? DEFAULT_SITE_SETTINGS.currency,
+            showPrices:
+              typeof data.showPrices === 'boolean'
+                ? data.showPrices
+                : DEFAULT_SITE_SETTINGS.showPrices,
           })
         }
       } catch (settingsError) {
         console.error(settingsError)
+      }
+    }
+
+    async function loadThemeSettings() {
+      try {
+        const themeSnapshot = await getDoc(doc(db, 'themeSettings', 'main'))
+
+        if (!cancelled && themeSnapshot.exists()) {
+          const data = themeSnapshot.data()
+
+          setThemeSettings({
+            heroBackgroundUrl:
+              data.heroBackgroundUrl ??
+              DEFAULT_THEME_SETTINGS.heroBackgroundUrl,
+            logoUrl: data.logoUrl ?? DEFAULT_THEME_SETTINGS.logoUrl,
+            pageBackgroundColor:
+              data.pageBackgroundColor ??
+              DEFAULT_THEME_SETTINGS.pageBackgroundColor,
+            primaryColor:
+              data.primaryColor ?? DEFAULT_THEME_SETTINGS.primaryColor,
+            buttonColor:
+              data.buttonColor ?? DEFAULT_THEME_SETTINGS.buttonColor,
+            priceBackgroundColor:
+              data.priceBackgroundColor ??
+              DEFAULT_THEME_SETTINGS.priceBackgroundColor,
+            priceTextColor:
+              data.priceTextColor ?? DEFAULT_THEME_SETTINGS.priceTextColor,
+            headingColor:
+              data.headingColor ?? DEFAULT_THEME_SETTINGS.headingColor,
+            textColor: data.textColor ?? DEFAULT_THEME_SETTINGS.textColor,
+            mutedTextColor:
+              data.mutedTextColor ?? DEFAULT_THEME_SETTINGS.mutedTextColor,
+            navigationBackgroundColor:
+              data.navigationBackgroundColor ??
+              DEFAULT_THEME_SETTINGS.navigationBackgroundColor,
+            footerBackgroundColor:
+              data.footerBackgroundColor ??
+              DEFAULT_THEME_SETTINGS.footerBackgroundColor,
+            arabicFont: data.arabicFont ?? DEFAULT_THEME_SETTINGS.arabicFont,
+            englishFont:
+              data.englishFont ?? DEFAULT_THEME_SETTINGS.englishFont,
+            heroOverlayOpacity:
+              typeof data.heroOverlayOpacity === 'number'
+                ? data.heroOverlayOpacity
+                : DEFAULT_THEME_SETTINGS.heroOverlayOpacity,
+          })
+        }
+      } catch (themeError) {
+        console.error(themeError)
+      }
+    }
+
+    async function loadContactSettings() {
+      try {
+        const contactSnapshot = await getDoc(
+          doc(db, 'contactSettings', 'main'),
+        )
+
+        if (!cancelled && contactSnapshot.exists()) {
+          const data = contactSnapshot.data()
+
+          setContactSettings({
+            phone: data.phone ?? DEFAULT_CONTACT_SETTINGS.phone,
+            whatsapp: data.whatsapp ?? DEFAULT_CONTACT_SETTINGS.whatsapp,
+            googleMapsUrl:
+              data.googleMapsUrl ?? DEFAULT_CONTACT_SETTINGS.googleMapsUrl,
+            instagramUrl:
+              data.instagramUrl ?? DEFAULT_CONTACT_SETTINGS.instagramUrl,
+            tiktokUrl: data.tiktokUrl ?? DEFAULT_CONTACT_SETTINGS.tiktokUrl,
+            snapchatUrl:
+              data.snapchatUrl ?? DEFAULT_CONTACT_SETTINGS.snapchatUrl,
+            xUrl: data.xUrl ?? DEFAULT_CONTACT_SETTINGS.xUrl,
+            facebookUrl:
+              data.facebookUrl ?? DEFAULT_CONTACT_SETTINGS.facebookUrl,
+          })
+        }
+      } catch (contactError) {
+        console.error(contactError)
       }
     }
 
@@ -233,6 +347,7 @@ function App() {
             id: categoryDocument.id,
             ...categoryDocument.data(),
           }))
+          .filter((category) => category.visible !== false)
           .sort(
             (categoryA, categoryB) =>
               (categoryA.order || 0) - (categoryB.order || 0),
@@ -264,9 +379,17 @@ function App() {
           }),
         )
 
-        if (!cancelled && sections.length > 0) {
-          setFirebaseMenu(sections)
-        }
+        const visibleSections = sections.filter(
+          (section) => section.products.length > 0,
+        )
+
+       if (!cancelled) {
+  setFirebaseMenu(
+    categoriesSnapshot.empty
+      ? menuSections
+      : visibleSections,
+  )
+}
       } catch (loadError) {
         console.error(loadError)
 
@@ -281,6 +404,8 @@ function App() {
     }
 
     loadSiteSettings()
+    loadThemeSettings()
+    loadContactSettings()
     loadMenuFromFirebase()
 
     return () => {
@@ -294,18 +419,67 @@ function App() {
 
   const firstSectionId = firebaseMenu[0]?.id || 'black'
 
+  const heroBackgroundUrl = getDirectImageUrl(themeSettings.heroBackgroundUrl)
+  const resolvedHeroBackground = heroBackgroundUrl
+    ? `url(${heroBackgroundUrl})`
+    : `url(${backgroundImage})`
+
+  const logoUrl = getDirectImageUrl(themeSettings.logoUrl)
+  const showLogo = Boolean(logoUrl) && !logoFailed
+
+  const hasContactInfo =
+    Boolean(contactSettings.phone) ||
+    Boolean(contactSettings.whatsapp) ||
+    Boolean(contactSettings.googleMapsUrl) ||
+    Boolean(contactSettings.instagramUrl) ||
+    Boolean(contactSettings.tiktokUrl) ||
+    Boolean(contactSettings.snapchatUrl) ||
+    Boolean(contactSettings.xUrl) ||
+    Boolean(contactSettings.facebookUrl)
+
+  const normalizedWhatsapp = normalizeWhatsappNumber(contactSettings.whatsapp)
+
+  const rootStyle = {
+    '--page-background': themeSettings.pageBackgroundColor,
+    '--primary-color': themeSettings.primaryColor,
+    '--button-color': themeSettings.buttonColor,
+    '--price-background': themeSettings.priceBackgroundColor,
+    '--price-text-color': themeSettings.priceTextColor,
+    '--heading-color': themeSettings.headingColor,
+    '--text-color': themeSettings.textColor,
+    '--muted-text-color': themeSettings.mutedTextColor,
+    '--navigation-background': themeSettings.navigationBackgroundColor,
+    '--footer-background': themeSettings.footerBackgroundColor,
+    '--english-font': themeSettings.englishFont,
+    '--arabic-font': themeSettings.arabicFont,
+    '--hero-overlay-opacity': themeSettings.heroOverlayOpacity,
+    backgroundColor: themeSettings.pageBackgroundColor,
+  }
+
   return (
-    <main className="website">
+    <main className="website" style={rootStyle}>
       <section
         className="hero"
-        style={{ backgroundImage: `url(${backgroundImage})` }}
+        style={{ backgroundImage: resolvedHeroBackground }}
       >
-        <div className="heroShade" />
+        <div
+          className="heroShade"
+          style={{ opacity: themeSettings.heroOverlayOpacity }}
+        />
 
         <div className="heroContent">
+          {showLogo && (
+            <img
+              className="heroLogo"
+              src={logoUrl}
+              alt={siteSettings.siteNameEn}
+              onError={() => setLogoFailed(true)}
+            />
+          )}
+
           <h1 className="brandName">
             {siteSettings.siteNameEn}
-            <span>{siteSettings.siteNameAr}</span>
+            {siteSettings.siteNameAr && <span>{siteSettings.siteNameAr}</span>}
           </h1>
 
           <div className="welcome">
@@ -408,10 +582,12 @@ function App() {
                       <h3>{product.nameEn}</h3>
                       <p>{product.nameAr}</p>
 
-                      <div className="productPrice">
-                        <strong>{product.price}</strong>
-                        <span>BD</span>
-                      </div>
+                      {siteSettings.showPrices && (
+                        <div className="productPrice">
+                          <strong>{product.price}</strong>
+                          <span>{siteSettings.currency}</span>
+                        </div>
+                      )}
                     </div>
                   </article>
                 )
@@ -420,6 +596,100 @@ function App() {
           </section>
         ))}
       </div>
+
+      {hasContactInfo && (
+        <section className="contactSection">
+          <h2 className="contactSectionTitle">Contact Us | تواصل معنا</h2>
+
+          <div className="contactLinks">
+            {contactSettings.phone && (
+              <a
+                className="contactLink contactPhone"
+                href={`tel:${contactSettings.phone}`}
+              >
+                Call | اتصال
+              </a>
+            )}
+
+            {normalizedWhatsapp && (
+              <a
+                className="contactLink contactWhatsapp"
+                href={`https://wa.me/${normalizedWhatsapp}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                WhatsApp | واتساب
+              </a>
+            )}
+
+            {contactSettings.googleMapsUrl && (
+              <a
+                className="contactLink contactMaps"
+                href={contactSettings.googleMapsUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Location | الموقع
+              </a>
+            )}
+
+            {contactSettings.instagramUrl && (
+              <a
+                className="contactLink contactSocial"
+                href={contactSettings.instagramUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Instagram
+              </a>
+            )}
+
+            {contactSettings.tiktokUrl && (
+              <a
+                className="contactLink contactSocial"
+                href={contactSettings.tiktokUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                TikTok
+              </a>
+            )}
+
+            {contactSettings.snapchatUrl && (
+              <a
+                className="contactLink contactSocial"
+                href={contactSettings.snapchatUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Snapchat
+              </a>
+            )}
+
+            {contactSettings.xUrl && (
+              <a
+                className="contactLink contactSocial"
+                href={contactSettings.xUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                X
+              </a>
+            )}
+
+            {contactSettings.facebookUrl && (
+              <a
+                className="contactLink contactSocial"
+                href={contactSettings.facebookUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Facebook
+              </a>
+            )}
+          </div>
+        </section>
+      )}
 
       <footer className="footer">
         <p>{siteSettings.footerText}</p>

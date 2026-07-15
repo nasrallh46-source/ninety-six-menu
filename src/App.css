@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&family=Almarai:wght@400;700;800&display=swap');
 
 * {
   box-sizing: border-box;
@@ -7,9 +7,10 @@
 
 .website {
   min-height: 100vh;
-  background: #f7f3f8;
-  color: #26132e;
+  background: var(--page-background, #f7f3f8);
+  color: var(--text-color, #26132e);
   overflow-x: hidden;
+  font-family: var(--english-font, 'Montserrat'), sans-serif;
 }
 
 .hero {
@@ -30,9 +31,9 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(22, 8, 30, 0.55) 0%,
-    rgba(29, 8, 39, 0.68) 50%,
-    rgba(17, 5, 23, 0.86) 100%
+  rgb(22, 8, 30) 0%,
+    rgb(29, 8, 39) 50%,
+    rgb(17, 5, 23) 100%
   );
 }
 
@@ -44,9 +45,20 @@
   color: #ffffff;
 }
 
+.heroLogo {
+  display: block;
+  max-width: 180px;
+  max-height: 150px;
+  width: auto;
+  height: auto;
+  margin: 0 auto 20px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.35));
+}
+
 .brandName {
   margin: 0;
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--english-font, 'Montserrat'), sans-serif;
   font-size: clamp(46px, 9vw, 88px);
   font-weight: 800;
   line-height: 0.95;
@@ -68,14 +80,14 @@
 
 .welcome h2 {
   margin: 0;
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--english-font, 'Montserrat'), sans-serif;
   font-size: clamp(22px, 3.6vw, 34px);
   font-weight: 600;
 }
 
 .welcome h3 {
   margin: 9px 0 0;
-  font-family: 'Cairo', sans-serif;
+  font-family: var(--arabic-font, 'Cairo'), sans-serif;
   font-size: clamp(21px, 3.4vw, 31px);
   font-weight: 600;
 }
@@ -89,10 +101,11 @@
   font-size: 16px;
   line-height: 1.8;
   opacity: 0.9;
+  font-family: var(--english-font, 'Montserrat'), sans-serif;
 }
 
 .description p:last-child {
-  font-family: 'Cairo', sans-serif;
+  font-family: var(--arabic-font, 'Cairo'), sans-serif;
   font-size: 17px;
 }
 
@@ -111,7 +124,7 @@
 }
 
 .workingHours span {
-  font-family: 'Cairo', sans-serif;
+  font-family: var(--arabic-font, 'Cairo'), sans-serif;
   font-size: 14px;
 }
 
@@ -154,7 +167,7 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(255, 255, 255, 0.96);
+  background: var(--navigation-background, rgba(255, 255, 255, 0.96));
   border-bottom: 1px solid rgba(62, 24, 76, 0.09);
   box-shadow: 0 7px 25px rgba(48, 15, 61, 0.07);
   backdrop-filter: blur(16px);
@@ -183,30 +196,30 @@
   align-items: center;
   gap: 3px;
   padding: 4px 2px;
-  color: #472052;
+  color: var(--heading-color, #472052);
   text-decoration: none;
   border-radius: 8px;
 }
 
 .navItem span {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--english-font, 'Montserrat'), sans-serif;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 1.1px;
 }
 
 .navItem small {
-  font-family: 'Cairo', sans-serif;
+  font-family: var(--arabic-font, 'Cairo'), sans-serif;
   font-size: 10px;
   font-weight: 600;
-  color: #8a7b90;
+  color: var(--muted-text-color, #8a7b90);
   direction: rtl;
   white-space: nowrap;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .navItem:hover span {
-    color: #8e4ca1;
+    color: var(--primary-color, #8e4ca1);
   }
 
   .productCard:hover {
@@ -217,10 +230,15 @@
   .productImage.hasImage:hover .productPhoto {
     transform: scale(1.05);
   }
+
+  .contactLink:hover {
+    transform: translateY(-3px);
+    opacity: 0.92;
+  }
 }
 
 .navItem:focus-visible {
-  outline: 2px solid #6b317d;
+  outline: 2px solid var(--primary-color, #6b317d);
   outline-offset: 2px;
 }
 
@@ -242,7 +260,7 @@
 }
 
 .sectionNumber {
-  color: #a685ad;
+  color: var(--muted-text-color, #a685ad);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 1px;
@@ -250,8 +268,8 @@
 
 .menuSectionHeader h2 {
   margin: 0;
-  color: #35123f;
-  font-family: 'Montserrat', sans-serif;
+  color: var(--heading-color, #35123f);
+  font-family: var(--english-font, 'Montserrat'), sans-serif;
   font-size: clamp(31px, 5vw, 50px);
   font-weight: 800;
   letter-spacing: 2px;
@@ -260,8 +278,8 @@
 
 .menuSectionHeader p {
   margin: 8px 0 0;
-  color: #755f7d;
-  font-family: 'Cairo', sans-serif;
+  color: var(--muted-text-color, #755f7d);
+  font-family: var(--arabic-font, 'Cairo'), sans-serif;
   font-size: 19px;
   font-weight: 600;
   direction: rtl;
@@ -296,9 +314,9 @@
   color: rgba(255, 255, 255, 0.55);
   background: radial-gradient(
     circle at 50% 35%,
-    #a870b8 0%,
-    #653578 45%,
-    #35133f 100%
+    color-mix(in srgb, var(--primary-color, #a870b8) 100%, white 0%) 0%,
+    var(--primary-color, #653578) 45%,
+    var(--heading-color, #35133f) 100%
   );
   font-size: 10px;
   font-weight: 600;
@@ -310,7 +328,7 @@
 }
 
 .productImage.hasImage:focus-visible {
-  outline: 3px solid #6b317d;
+  outline: 3px solid var(--primary-color, #6b317d);
   outline-offset: -3px;
 }
 
@@ -329,8 +347,8 @@
 
 .productDetails h3 {
   margin: 0;
-  color: #2c1035;
-  font-family: 'Montserrat', sans-serif;
+  color: var(--heading-color, #2c1035);
+  font-family: var(--english-font, 'Montserrat'), sans-serif;
   font-size: 16px;
   font-weight: 700;
   line-height: 1.35;
@@ -340,8 +358,8 @@
 .productDetails p {
   min-height: 28px;
   margin: 7px 0 15px;
-  color: #77637d;
-  font-family: 'Cairo', sans-serif;
+  color: var(--muted-text-color, #77637d);
+  font-family: var(--arabic-font, 'Cairo'), sans-serif;
   font-size: 15px;
   font-weight: 500;
   line-height: 1.5;
@@ -355,8 +373,8 @@
   gap: 5px;
   padding: 7px 14px;
   border-radius: 50px;
-  color: #ffffff;
-  background: #582369;
+  color: var(--price-text-color, #ffffff);
+  background: var(--price-background, #582369);
   white-space: nowrap;
 }
 
@@ -369,12 +387,77 @@
   font-weight: 600;
 }
 
+/* ---------- Contact Section ---------- */
+
+.contactSection {
+  width: min(1200px, calc(100% - 34px));
+  margin: 90px auto 0;
+  padding: 45px 24px;
+  text-align: center;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(62, 24, 76, 0.08);
+  box-shadow: 0 15px 40px rgba(47, 14, 59, 0.06);
+}
+
+.contactSectionTitle {
+  margin: 0 0 26px;
+  color: var(--heading-color, #35123f);
+  font-family: var(--english-font, 'Montserrat'), sans-serif;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.contactLinks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.contactLink,
+.contactPhone,
+.contactWhatsapp,
+.contactMaps,
+.contactSocial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 50px;
+  color: #ffffff;
+  background: var(--button-color, #542065);
+  font-family: var(--english-font, 'Montserrat'), sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 8px 20px rgba(47, 14, 59, 0.12);
+}
+
+.contactLink:focus-visible,
+.contactPhone:focus-visible,
+.contactWhatsapp:focus-visible,
+.contactMaps:focus-visible,
+.contactSocial:focus-visible {
+  outline: 2px solid var(--primary-color, #6b317d);
+  outline-offset: 2px;
+}
+
 .footer {
   margin-top: 100px;
   padding: 45px 20px;
   text-align: center;
   color: #ffffff;
-  background: #28102f;
+  background: var(--footer-background, #28102f);
 }
 
 .footer p {
@@ -488,12 +571,22 @@
   .productsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .contactSection {
+    padding: 36px 18px;
+  }
 }
 
 @media (max-width: 520px) {
   .hero {
     min-height: 100vh;
     padding: 45px 17px 35px;
+  }
+
+  .heroLogo {
+    max-width: 120px;
+    max-height: 100px;
+    margin-bottom: 14px;
   }
 
   .brandName {
@@ -567,6 +660,32 @@
 
   .productPrice strong {
     font-size: 12px;
+  }
+
+  .contactSection {
+    width: min(100% - 22px, 1200px);
+    margin-top: 60px;
+    padding: 28px 14px;
+    border-radius: 18px;
+  }
+
+  .contactSectionTitle {
+    margin-bottom: 18px;
+  }
+
+  .contactLinks {
+    gap: 10px;
+  }
+
+  .contactLink,
+  .contactPhone,
+  .contactWhatsapp,
+  .contactMaps,
+  .contactSocial {
+    flex: 1 1 45%;
+    min-width: 140px;
+    padding: 12px 14px;
+    font-size: 13px;
   }
 }
 
